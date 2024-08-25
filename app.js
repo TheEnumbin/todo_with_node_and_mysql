@@ -25,11 +25,7 @@ db.connect((err) => {
   
   // Query to fetch customer data
   const query = `
-    SELECT c.id AS customer_id, c.name AS customer_name, c.email AS customer_email, c.age AS customer_age,
-           r.id AS request_id, r.request_details, r.request_date
-    FROM customers c
-    LEFT JOIN requests r ON c.id = r.customer_id
-    ORDER BY c.id, r.request_date;
+    SELECT * FROM tasks;
   `;
   
   db.query(query, (err, results) => {
@@ -38,16 +34,11 @@ db.connect((err) => {
       return;
     }
   
-    console.log('Customers and their requests:');
     results.forEach((row) => {
       console.log({
-        customer_id: row.customer_id,
-        customer_name: row.customer_name,
-        customer_email: row.customer_email,
-        customer_age: row.customer_age,
-        request_id: row.request_id,
-        request_details: row.request_details,
-        request_date: row.request_date
+        task_id: row.task_id,
+        task_name: row.task_name,
+        status: row.status,
       });
     });
   });
