@@ -30,8 +30,14 @@ const updateTask = (taskId, updatedTask, callback) => {
     db.query(updateQuery, [updatedTask, taskId], callback);
 };
 
+const deleteTask = (taskId, callback) => {
+    const deleteQuery = 'DELETE FROM tasks WHERE task_id = ?';
+    db.query(deleteQuery, [taskId], callback);
+};
+
 module.exports = {
     insertTask,
     fetchTasks,
     updateTask,
+    deleteTask,  // Export the deleteTask function
 };
