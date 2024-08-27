@@ -25,8 +25,13 @@ const fetchTasks = (callback) => {
     db.query(selectQuery, callback);
 };
 
+const updateTask = (taskId, updatedTask, callback) => {
+    const updateQuery = 'UPDATE tasks SET ? WHERE task_id = ?';
+    db.query(updateQuery, [updatedTask, taskId], callback);
+};
+
 module.exports = {
     insertTask,
     fetchTasks,
+    updateTask,
 };
-  
