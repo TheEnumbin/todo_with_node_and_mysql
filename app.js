@@ -67,6 +67,26 @@ const server = http.createServer((req, res) => {
                 res.end(JSON.stringify({ success: true }));
             });
         });
+    } else if (req.method === 'DELETE' && req.url.startsWith('/api/tasks/')) {
+        // Extract the task ID from the URL
+        const taskId = req.url.split('/')[3];
+
+        deleteTask(taskId, (err, result) => {
+            if (err) {
+                res.writeHead(500, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ error: 'Error deleting task' }));
+                return;
+            }
+
+            if (result.affectedRows === 0) {
+                res.writeHead(404, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ error: 'Task not found' }));
+                return;
+            }
+
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ success: true }));
+        });
     } else {
         res.writeHead(404, { 'Content-Type': 'text/plain' });
         res.end('Not Found');
