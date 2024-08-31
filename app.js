@@ -1,5 +1,5 @@
 const http = require('http');
-const { insertTask, fetchTasks } = require('./Db');  // Import the fetchTasks function
+const { insertTask, fetchTasks } = require('./src/db');  // Import the fetchTasks function
 
 const server = http.createServer((req, res) => {
     if (req.method === 'POST' && req.url === '/api/tasks') {
