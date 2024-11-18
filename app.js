@@ -2,6 +2,16 @@ const http = require('http');
 const { insertTask, fetchTasks } = require('./src/db');  // Import the fetchTasks function
 
 const server = http.createServer((req, res) => {
+    console.log("hello")
+    res.setHeader('Access-Control-Allow-Origin', '*'); // Allow requests from any origin
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS'); // Allow specific methods
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization'); // Allow specific headers
+    if (req.method === 'OPTIONS') {
+        res.writeHead(204); // No Content status
+        res.end();
+        return;
+    }
+    console.log("hello")
     if (req.method === 'POST' && req.url === '/api/tasks') {
         let body = '';
         req.on('data', chunk => {
@@ -95,4 +105,7 @@ const server = http.createServer((req, res) => {
 
 server.listen(3001, () => {
     console.log('Server running at http://localhost:3001');
+});
+server.on('error', (error) => {
+    console.error('Server failed to start:', error.message);
 });
