@@ -6,12 +6,7 @@ const server = http.createServer((req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*'); // Allow requests from any origin
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS'); // Allow specific methods
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization'); // Allow specific headers
-    if (req.method === 'OPTIONS') {
-        res.writeHead(204); // No Content status
-        res.end();
-        return;
-    }
-    console.log("hello")
+
     if (req.method === 'POST' && req.url === '/api/tasks') {
         let body = '';
         req.on('data', chunk => {
