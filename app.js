@@ -2,7 +2,6 @@ const http = require('http');
 const { insertTask, fetchTasks } = require('./src/db');  // Import the fetchTasks function
 
 const server = http.createServer((req, res) => {
-    console.log("hello")
     res.setHeader('Access-Control-Allow-Origin', '*'); // Allow requests from any origin
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS'); // Allow specific methods
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type'); // Allow specific headers
@@ -24,10 +23,12 @@ const server = http.createServer((req, res) => {
             const postData = JSON.parse(body);
             const newTask = {
                 task_name: postData.task_name,
-                task_status: postData.task_status,
+                status: postData.status,
                 date: new Date()
             };
-            console.log("hello")
+            console.log(body)
+            console.log(body)
+            console.log(postData)
 
             insertTask(newTask, (err, result) => {
                 if (err) {
