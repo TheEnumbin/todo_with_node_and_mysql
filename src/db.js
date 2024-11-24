@@ -17,6 +17,12 @@ db.connect((err) => {
 // Connect to the database
 const insertTask = (newTask, callback) => {
     const insertQuery = 'INSERT INTO tasks SET ?';
+
+    // Format the query for logging
+    const formattedQuery = mysql.format(insertQuery, newTask);
+    console.log('Executing SQL Query:', formattedQuery);
+
+    // Execute the query
     db.query(insertQuery, newTask, callback);
 };
 

@@ -5,7 +5,7 @@ const server = http.createServer((req, res) => {
     console.log("hello")
     res.setHeader('Access-Control-Allow-Origin', '*'); // Allow requests from any origin
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS'); // Allow specific methods
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization'); // Allow specific headers
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type'); // Allow specific headers
 
     // Handle preflight requests (OPTIONS method)
     if (req.method === 'OPTIONS') {
@@ -27,6 +27,7 @@ const server = http.createServer((req, res) => {
                 task_status: postData.task_status,
                 date: new Date()
             };
+            console.log("hello")
 
             insertTask(newTask, (err, result) => {
                 if (err) {
