@@ -1,5 +1,5 @@
 const http = require('http');
-const { insertTask, fetchTasks } = require('./src/db');  // Import the fetchTasks function
+const { insertTask, fetchTasks, deleteTask } = require('./src/db');  // Import the fetchTasks function
 
 const server = http.createServer((req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*'); // Allow requests from any origin
@@ -10,6 +10,7 @@ const server = http.createServer((req, res) => {
         res.end();
         return;
     }
+    console.log(req.method)
     if (req.method === 'POST' && req.url === '/api/tasks') {
         let body = '';
         req.on('data', chunk => {
@@ -23,9 +24,6 @@ const server = http.createServer((req, res) => {
                 status: postData.status,
                 date: new Date()
             };
-            console.log(body)
-            console.log(body)
-            console.log(postData)
 
             insertTask(newTask, (err, result) => {
                 if (err) {
@@ -81,7 +79,7 @@ const server = http.createServer((req, res) => {
     } else if (req.method === 'DELETE' && req.url.startsWith('/api/tasks/')) {
         // Extract the task ID from the URL
         const taskId = req.url.split('/')[3];
-
+        console.log("deliting")
         deleteTask(taskId, (err, result) => {
             if (err) {
                 res.writeHead(500, { 'Content-Type': 'application/json' });
