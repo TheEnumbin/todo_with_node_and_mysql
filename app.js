@@ -1,5 +1,5 @@
 const http = require('http');
-const { insertTask, fetchTasks, deleteTask } = require('./src/db');  // Import the fetchTasks function
+const { insertTask, fetchTasks, updateTask, deleteTask } = require('./src/db');  // Import the fetchTasks function
 
 const server = http.createServer((req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*'); // Allow requests from any origin
@@ -50,7 +50,7 @@ const server = http.createServer((req, res) => {
         });
     } else if (req.method === 'PUT' && req.url.startsWith('/api/tasks/')) {
         const taskId = req.url.split('/')[3];
-
+        console.log(taskId)
         let body = '';
         req.on('data', chunk => {
             body += chunk.toString();
