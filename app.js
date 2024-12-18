@@ -1,5 +1,6 @@
 const http = require('http');
 const { insertTask, fetchTasks, updateTask, deleteTask } = require('./src/db');  // Import the fetchTasks function
+const measureTime = require('./src/measureTimeMiddleware');  // Import the fetchTasks function
 
 const server = http.createServer((req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*'); // Allow requests from any origin
@@ -38,15 +39,21 @@ const server = http.createServer((req, res) => {
         });
     } else if (req.method === 'GET' && req.url === '/api/tasks') {
         // Fetch all tasks and send them as a JSON response
-        fetchTasks((err, results) => {
-            if (err) {
-                res.writeHead(500, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify({ error: 'Error fetching tasks' }));
-                return;
+        measureTime(req, res, () => {
+            if (req.method === 'GET' && req.url === '/api/tasks') {
+                fetchTasks((err, tasks) => {
+                    if (err) {
+                        res.writeHead(500, { 'Content-Type': 'application/json' });
+                        res.end(JSON.stringify({ error: 'Error fetching tasks' }));
+                    } else {
+                        res.writeHead(200, { 'Content-Type': 'application/json' });
+                        res.end(JSON.stringify(tasks));
+                    }
+                });
+            } else {
+                res.writeHead(404, { 'Content-Type': 'text/plain' });
+                res.end('Route not found');
             }
-
-            res.writeHead(200, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify(results));
         });
     } else if (req.method === 'PUT' && req.url.startsWith('/api/tasks/')) {
         const taskId = req.url.split('/')[3];

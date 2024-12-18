@@ -27,6 +27,8 @@ const fetchTasks = (callback) => {
 
 const updateTask = (taskId, updatedTask, callback) => {
     const updateQuery = 'UPDATE tasks SET ? WHERE task_id = ?';
+    console.log(updatedTask);
+    
     db.query(updateQuery, [updatedTask, taskId], callback);
 };
 
