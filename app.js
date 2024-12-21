@@ -59,7 +59,6 @@ const server = http.createServer((req, res) => {
         
     } else if (req.method === 'PUT' && req.url.startsWith('/api/tasks/')) {
         const taskId = req.url.split('/')[3];
-        console.log(taskId)
         let body = '';
         req.on('data', chunk => {
             body += chunk.toString();
@@ -88,7 +87,6 @@ const server = http.createServer((req, res) => {
     } else if (req.method === 'DELETE' && req.url.startsWith('/api/tasks/')) {
         // Extract the task ID from the URL
         const taskId = req.url.split('/')[3];
-        console.log("deliting")
         deleteTask(taskId, (err, result) => {
             if (err) {
                 res.writeHead(500, { 'Content-Type': 'application/json' });
