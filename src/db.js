@@ -21,7 +21,7 @@ const insertTask = (newTask, callback) => {
 };
 
 const fetchTasks = (callback) => {
-    const selectQuery = 'SELECT * FROM tasks';
+    const selectQuery = 'SELECT * FROM tasks ORDER BY position ASC';
     db.query(selectQuery, callback);
 };
 
