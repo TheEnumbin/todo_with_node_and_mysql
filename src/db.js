@@ -35,9 +35,21 @@ const deleteTask = (taskId, callback) => {
     db.query(deleteQuery, [taskId], callback);
 };
 
+const updateTaskPositions = (tasks, callback) => {
+    const query = `
+        UPDATE tasks
+        SET position = CASE task_id
+        ${tasks.map(task => `WHEN ${task.task_id} THEN ${task.position}`).join('\n')}
+        END
+        WHERE task_id IN (${tasks.map(task => task.task_id).join(',')})
+    `;
+    db.query(query, callback);
+};
+
 module.exports = {
     insertTask,
     fetchTasks,
     updateTask,
+    updateTaskPositions,
     deleteTask,  // Export the deleteTask function
 };

@@ -1,5 +1,5 @@
 const http = require('http');
-const { insertTask, fetchTasks, updateTask, deleteTask } = require('./src/db');  // Import the fetchTasks function
+const { insertTask, fetchTasks, updateTask, deleteTask, updateTaskPositions } = require('./src/db');  // Import the fetchTasks function
 const {measureTime, logRequest} = require('./src/measureTimeMiddleware');  // Import the fetchTasks function
 
 const server = http.createServer((req, res) => {
@@ -57,6 +57,42 @@ const server = http.createServer((req, res) => {
             });
         })
         
+    } else if (req.method === 'PUT' && req.url === '/api/tasks/updatePositions') {
+        let body = '';
+
+        // Collect the request body
+        req.on('data', chunk => {
+            body += chunk.toString();
+        });
+
+        req.on('end', () => {
+            try {
+                const { tasks } = JSON.parse(body);
+
+                // Validate the input
+                if (!Array.isArray(tasks) || tasks.some(task => !task.task_id || task.position === undefined)) {
+                    res.writeHead(400, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ error: 'Invalid task data' }));
+                    return;
+                }
+
+                // Update task positions in the database
+                updateTaskPositions(tasks, (err, result) => {
+                    if (err) {
+                        res.writeHead(500, { 'Content-Type': 'application/json' });
+                        res.end(JSON.stringify({ error: 'Failed to update task positions' }));
+                        console.error('Database error:', err);
+                        return;
+                    }
+
+                    res.writeHead(200, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ success: true, affectedRows: result.affectedRows }));
+                });
+            } catch (err) {
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ error: 'Invalid JSON format' }));
+            }
+        });
     } else if (req.method === 'PUT' && req.url.startsWith('/api/tasks/')) {
         const taskId = req.url.split('/')[3];
         let body = '';
